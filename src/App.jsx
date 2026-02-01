@@ -125,6 +125,29 @@ export default function App() {
     showNotify("Ordem de compra gerada!");
   };
 
+  const finishOrder = (orderId) => {
+    setOrders((prevOrders) => {
+      const targetOrder = prevOrders.find((o) => o.id === orderId);
+      if (!targetOrder || targetOrder.status === "Finalizado") {
+        return prevOrders;
+      }
+
+      // Atualiza o estoque somando as quantidades recebidas
+      setProducts((prevProducts) =>
+        prevProducts.map((p) => {
+          const item = targetOrder.items.find((i) => i.id === p.id);
+          if (!item) return p;
+          return { ...p, stock: p.stock + item.quantity };
+        })
+      );
+
+      showNotify("Estoque atualizado!");
+      return prevOrders.map((o) =>
+        o.id === orderId ? { ...o, status: "Finalizado" } : o
+      );
+    });
+  };
+
   const sendWhatsApp = (order) => {
     const message =
       `Olá, sou do MercadoSys. Gostaria de realizar um pedido:\n\n` +
@@ -163,7 +186,7 @@ export default function App() {
         </header>
 
         {activeTab === "dashboard" && (
-          <Dashboard products={products} suppliers={suppliers} />
+          <Dashboard products={products} suppliers={suppliers} orders={orders} />
         )}
 
         {activeTab === "inventory" && (
@@ -175,7 +198,11 @@ export default function App() {
         )}
 
         {activeTab === "orders" && (
-          <Orders orders={orders} sendWhatsApp={sendWhatsApp} />
+          <Orders
+            orders={orders}
+            sendWhatsApp={sendWhatsApp}
+            finishOrder={finishOrder}
+          />
         )}
 
         {activeTab === "register" && (
