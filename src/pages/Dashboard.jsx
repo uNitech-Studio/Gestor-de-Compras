@@ -1,5 +1,5 @@
 import { Package, Users, AlertTriangle } from "lucide-react";
-import StatCard from "../components/ui/Statcard";
+import StatCard from "../components/ui/StatCard";
 
 export default function Dashboard({ products, suppliers }) {
   const urgentCount = products.filter(p => p.stock <= p.minStock).length;

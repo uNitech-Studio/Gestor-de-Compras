@@ -25,7 +25,7 @@ export default function Sidebar({ activeTab, setActiveTab, cartLength }) {
             className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all font-medium ${
               activeTab === item.id
                 ? 'bg-indigo-50 text-indigo-700'
-                : 'text-slate-500 hover:bg-slate-50'
+                : 'text-slate-600 hover:bg-slate-50'
             }`}
           >
             <item.icon size={18} />
